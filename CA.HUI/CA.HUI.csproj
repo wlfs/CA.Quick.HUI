@@ -306,6 +306,9 @@
     <Content Include="Areas\Admin\Views\CommonGroups\Create.cshtml" />
     <Content Include="Areas\Admin\Views\CommonGroups\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\CommonGroups\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\File.pubxml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
