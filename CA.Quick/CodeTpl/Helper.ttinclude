@@ -1,0 +1,20 @@
+﻿<#@ assembly name="System.Core"#>
+   <#@ assembly name="System.Data"#>
+   <#@ import namespace="System" #>
+   <#@ import namespace="System.Collections.Generic" #>
+   <#@ import namespace="System.Text" #>
+   <#+
+	public class Helper
+    {
+        public static string tableNameToClassName(string tableName)
+        {
+            var namses = tableName.Split('-','_');
+            var name = "";
+            for (var i = 0; i < namses.Length; i++)
+            {
+                name += namses[i][0].ToString().ToUpper() + namses[i].Substring(1);
+            }
+            return name;
+        }
+    }
+	 #>
