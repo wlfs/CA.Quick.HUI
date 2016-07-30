@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Dynamic;
 using System.Diagnostics;
+using CA.Quick.Utils;
 
 namespace CA.Quick.Models.Tests
 {
@@ -68,6 +69,12 @@ namespace CA.Quick.Models.Tests
             Debug.WriteLine(str);
         }
 
+        [TestMethod()]
+        public void Find2Test()
+        {
+            var r=new ValidateCode().Make();
+            r.Close();
+        }
 
     }
 }

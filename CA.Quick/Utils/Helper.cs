@@ -9,6 +9,8 @@ namespace CA.Quick.Utils
 {
     public class Helper
     {
+       
+
         /// <summary>
         /// 生成随机数
         /// </summary>
@@ -44,6 +46,16 @@ namespace CA.Quick.Utils
             }
             // return OutString.ToUpper();
             return OutString.ToLower();
+        }
+        public static string GetBinPath() {
+            string path = "";
+            if (Environment.CurrentDirectory == AppDomain.CurrentDomain.BaseDirectory)//Windows应用程序则相等  
+            {
+                path = AppDomain.CurrentDomain.BaseDirectory;
+            }else{
+                path=AppDomain.CurrentDomain.BaseDirectory+"Bin";
+            }
+            return path;
         }
     }
 }

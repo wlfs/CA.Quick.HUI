@@ -14,6 +14,29 @@ namespace CA.Quick
     /// </summary>
     public static class ExtensionMethod
     {
+        public static void IntToString(this ICollection<dynamic> data, string field, IDictionary<int, string> dic)
+        {
+            var maps = new Dictionary<string, IDictionary<int, string>>();
+            maps.Add(field,dic);
+            data.IntToString(maps);
+        }
+        public static void IntToString(this ICollection<dynamic> data,Dictionary<string, IDictionary<int, string>>  maps)
+        {
+            if (maps != null && maps.Count > 0) {
+                int i = 0;
+                foreach (IDictionary<string, object> item in data)
+                {
+                    foreach (var map in maps)
+                    {
+                        if (item.ContainsKey(map.Key)) {
+                            int v=(int)item[map.Key];
+                            item.Add(map + "_text", map.Value[v]);
+                        }
+                    }
+                    i++;
+                }
+            }
+        }
         /// <summary>
         /// 获取动态数据
         /// </summary>

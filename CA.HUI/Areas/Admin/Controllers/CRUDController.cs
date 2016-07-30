@@ -7,8 +7,11 @@ using System.Web.Mvc;
 
 namespace CA.HUI.Areas.Admin.Controllers
 {
+    [Login]
+    [AdminAuthorize]
     public class CRUDController<T> : Controller where T:BaseModel,new()
     {
+        [AdminAuthorize]
         // GET: Admin/CRUD
         public ActionResult Index()
         {

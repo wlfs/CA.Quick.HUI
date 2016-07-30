@@ -322,7 +322,7 @@ namespace CA.Quick
                 return ExecuteNonQuery(connection, commandType, commandText, parms);
             }
         }
-        [Conditional("DEBUG")]
+        //[Conditional("DEBUG")]
         public static void Log(string sql, params DbParameter[] parms)
         {
             StringBuilder sb = new StringBuilder();
@@ -335,7 +335,7 @@ namespace CA.Quick
                     sb.AppendFormat("{0}:{1} \r\n", item.ParameterName, item.Value);
                 }
             }
-            Debug.WriteLine(sb.ToString());
+           Trace.TraceInformation(sb.ToString());
 
         }
 

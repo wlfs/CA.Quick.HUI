@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,6 +67,76 @@ namespace CA.Quick
             else {
                 return Result<int>.Error("无数据添加！");
             }
+        }
+        public Result<int> AddAll(ICollection<dynamic> lis) {
+            List<String> fields = new List<string>();
+            List<DbParameter> _parameters = new List<DbParameter>();
+            var where = CPQuery.New();
+            var _tfilds = GetFields();
+            var i =0;
+            foreach (IDictionary<String, Object> obj in lis)
+            {
+                var j = 0;
+                if (i == 0)
+                {
+                    where = where + "(";
+                    foreach (var property in obj)
+                    {
+                        var name = property.Key.ToLower();
+                        if (_tfilds.Contains(name))
+                        {
+                            fields.Add(name);
+                            if (j == 0)
+                            {
+                                where = where + property.Value.AsQueryParameter();
+                                j++;
+                            }
+                            else {
+                                where = where +","+ property.Value.AsQueryParameter();
+                            }
+                        }
+                    }
+                    where = where + ")";
+                    i++;
+                }
+                else {
+                    where = where + "(";
+                    foreach (var field in fields)
+                    {
+                       
+                        if (obj.ContainsKey(field))
+                        {
+                            if (j == 0)
+                            {
+                                where = where + obj[field].AsQueryParameter();
+                                j++;
+                            }
+                            else
+                            {
+                                where = where + "," + obj[field].AsQueryParameter();
+                            }
+                        }
+                    }
+                    where = where + ")";
+                }
+            }
+            if (fields.Count > 0)
+            {
+                where.BindParameter(_parameters);
+                var sql = string.Format("insert into {0} (`{1}`) VALUES(@{2})", tableName, fields.Implode("`,`"), where.ToString());
+                var count = DB.ExecuteNonQuery(sql, _parameters.ToArray());
+                return Result<int>.ResultData(count);
+            }
+            else
+            {
+                return Result<int>.Error("无数据添加！");
+            }
+        }
+        public static dynamic CreateDynamic() {
+            return new ExpandoObject();
+        }
+        public static CPQuery CreateWhere() {
+            return CPQuery.New() + " 1=1 ";
         }
         public Result<int> AddResult(dynamic obj) {
             List<String> fields = new List<string>();
@@ -155,17 +226,30 @@ namespace CA.Quick
                 reader.Close();
                 return new DynamicDataObject(dic);
             }
-            return false;
+            return null;
+        }
+        public int QueryCount(CPQuery where = null) {
+            return QueryCount(tableName, where);
+        }
+        public int QueryCount(string table,CPQuery where=null) {
+            if (where == null)
+            {
+                where = CreateWhere();
+            }
+            List<DbParameter> _parameters = new List<DbParameter>();
+            where.BindParameter(_parameters);//绑定where条件
+            var countSql = String.Format("select count(1) cp_count from {0} where {1} ", table, where);
+            return DB.ExecuteScalar<int>(countSql, _parameters.ToArray());
         }
         public PagedList<dynamic> PageList(String table,String fields, CPQuery where=null, int pageIndex = 1, int pageSize = 20) {
             if (where == null)
             {
-                where = CPQuery.New()+" 1 = 1 ";
+                where = CreateWhere();
             }
             List<DbParameter> _parameters = new List<DbParameter>();
             where.BindParameter(_parameters);//绑定where条件
-            var countSql = String.Format("select count(1) cp_count from {0} where 1=1  {1} ",table,where);
-            var selectSql= String.Format("select {2} from {0} where 1=1  {1} limit {3},{4}", table, where,fields,(pageIndex-1)* pageSize, pageSize);
+            var countSql = String.Format("select count(1) cp_count from {0} where  {1} ",table,where);
+            var selectSql= String.Format("select {2} from {0} where  {1} limit {3},{4}", table, where,fields,(pageIndex-1)* pageSize, pageSize);
             var reader = DB.ExecuteDataReader(countSql+";"+selectSql, _parameters.ToArray());
             var totalCount = 0;
             if (reader.Read())
@@ -217,7 +301,7 @@ namespace CA.Quick
         {
             if (where == null)
             {
-                where = CPQuery.New();
+                where = CreateWhere();
             }
             List<DbParameter> _parameters = new List<DbParameter>();
             where.BindParameter(_parameters);//绑定where条件
@@ -236,5 +320,26 @@ namespace CA.Quick
             reader.Close();
             return lis;
         }
+        public List<VT> QueryField<VT>(String field, CPQuery where = null) {
+            return QueryField<VT>(tableName, field, where);
+        }
+
+        public List<VT> QueryField<VT>(string table, String field, CPQuery where = null) {
+            if (where == null)
+            {
+                where = CreateWhere();
+            }
+            List<DbParameter> _parameters = new List<DbParameter>();
+            where.BindParameter(_parameters);//绑定where条件
+            var sql = string.Format("select distinct {2}  from {0} where {1} ", table, where.ToString(), field);
+            var reader = DB.ExecuteDataReader(sql, _parameters.ToArray());
+            var lis = new List<VT>();
+            while (reader.Read())
+            {
+                lis.Add((VT)Convert.ChangeType(reader[field], typeof(VT)));
+            }
+            reader.Close();
+            return lis;
+        } 
     }
 }

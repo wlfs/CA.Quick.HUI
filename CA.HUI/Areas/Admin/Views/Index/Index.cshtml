@@ -16,10 +16,8 @@
     <link rel="stylesheet" type="text/css" href="~/Public/Admin/H-ui/static/h-ui/css/H-ui.min.css" />
     <link rel="stylesheet" type="text/css" href="~/Public/Admin/H-ui/static/h-ui/css/H-ui.admin.css" />
     <link rel="stylesheet" type="text/css" href="~/Public/Admin/H-ui/lib/Hui-iconfont/1.0.7/iconfont.css" />
-    <php>
-        $skin=getSkin();
-    </php>
-    <link rel="stylesheet" type="text/css" href="~/Public/Admin/H-ui/static/h-ui/skin/{$skin|default='default'}/skin.css" id="skin" />
+
+    <link rel="stylesheet" type="text/css" href="~/Public/Admin/H-ui/static/h-ui/skin/@UIHelper.GetSkin()/skin.css" id="skin" />
     <!--[if IE 6]>
     <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
     <script>DD_belatedPNG.fix('*');</script>
@@ -32,7 +30,7 @@
         <div id="Hui-tabNav" class="Hui-tabNav hidden-xs">
             <div class="Hui-tabNav-wp">
                 <ul id="min_title_list" class="acrossTab cl">
-                    <li class="active"><span title="我的桌面" data-href="{:U('welcome')}">我的桌面</span><em></em></li>
+                    <li class="active"><span title="我的桌面" data-href="@Url.Action("Welcome")">我的桌面</span><em></em></li>
                 </ul>
             </div>
             <div class="Hui-tabNav-more btn-group"><a id="js-tabNav-prev" class="btn radius btn-default size-S" href="javascript:;"><i class="Hui-iconfont">&#xe6d4;</i></a><a id="js-tabNav-next" class="btn radius btn-default size-S" href="javascript:;"><i class="Hui-iconfont">&#xe6d7;</i></a></div>
@@ -40,7 +38,7 @@
         <div id="iframe_box" class="Hui-article">
             <div class="show_iframe">
                 <div style="display:none" class="loading"></div>
-                <iframe scrolling="yes" name='content_ifram' frameborder="0" src="{:U('welcome')}"></iframe>
+                <iframe scrolling="yes" name='content_ifram' frameborder="0" src="@Url.Action("Welcome")"></iframe>
             </div>
         </div>
     </section>
@@ -56,7 +54,7 @@
 			var hrefStr=$("#skin").attr("href");
 			var hrefRes=hrefStr.substring(0,hrefStr.lastIndexOf('skin/'))+'skin/'+v+'/skin.css';
 			$(window.frames.document).contents().find("#skin").attr("href",hrefRes);
-			$.post("{:U('Index/setSkin')}", {'skin': v}, function(d) {});
+			$.post("@Url.Action("SetSkin")", { 'skin': v }, function (d) { });
 		});
 		$(function (argument) {
 			$('.menu_dropdown>dl>dt:first').click();

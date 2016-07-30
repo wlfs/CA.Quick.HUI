@@ -1,89 +1,32 @@
-﻿using System;
+﻿using CA.Quick.Models;
+using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CA.Quick;
 
 namespace CA.HUI.Areas.Admin.Controllers
 {
+
     public class IndexController : Controller
     {
         // GET: Admin/Index
         public ActionResult Index()
         {
+            ViewBag.AdminInfo = new ExpandoObject();
+            ViewBag.AdminInfo.name= "Admin" + Session["AdminInfo2"]+ Session["AdminInfo"];
             return View();
         }
-
-        // GET: Admin/Index/Details/5
-        public ActionResult Details(int id)
-        {
+        public ActionResult Welcome() {
             return View();
         }
+        public ActionResult SetSkin(FormCollection coll) {
 
-        // GET: Admin/Index/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Admin/Index/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Admin/Index/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Admin/Index/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Admin/Index/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Admin/Index/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            var model=UIHelper.Get<CommonAdmin>();
+            var r=model.Update(coll.GetDynamic(),UIHelper.UserID);
+            return Json(r);
         }
     }
 }

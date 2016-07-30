@@ -120,6 +120,11 @@ namespace CA.Quick
                 _sb.Append(s);
             }
         }
+        public string AddParams(QueryParameter p) {
+            string name = "@p" + (_count++).ToString();
+            _parameters.Add(name, p);
+            return name;
+        }
         private void AddParameter(QueryParameter p)
         {
             if (_autoDiscoverParameters && _step == SPStep.Skip)
@@ -154,10 +159,31 @@ namespace CA.Quick
             // 其它类型全部放弃尝试。
             return null;
         }
-
-        public CPQuery FullLike(string field, string value) {
-            AddSqlText(" and  "+field+" like ");
-            AddParameter(("%" + value + "%").AsQueryParameter());
+        /// <summary>
+        /// 模糊查询
+        /// </summary>
+        /// <param name="fields">字段集名称，多个字段用|或&分割</param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public CPQuery FullLike(string fields, string value) {
+            var fieldArr=fields.Split('|','&');
+            if (fieldArr.Length > 1)
+            {
+                _sb.Append(" and ( ");
+                var pname = AddParams(("%" + value + "%").AsQueryParameter());
+                foreach (var item in fieldArr)
+                {
+                    fields=fields.Replace("|"," like "+pname+" or ");
+                    fields = fields.Replace("&", " like " + pname + " and ");
+                    _sb.Append(fields + " like "+ pname);
+                }
+                _sb.Append(" ) ");
+            }
+            else {
+                AddSqlText(" and  " + fields + " like ");
+                AddParameter(("%" + value + "%").AsQueryParameter());
+            }
+           
             return this;
         }
 
