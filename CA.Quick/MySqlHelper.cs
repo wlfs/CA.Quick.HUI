@@ -335,7 +335,7 @@ namespace CA.Quick
                     sb.AppendFormat("{0}:{1} \r\n", item.ParameterName, item.Value);
                 }
             }
-           Trace.TraceInformation(sb.ToString());
+           Trace.WriteLine(sb.ToString());
 
         }
 

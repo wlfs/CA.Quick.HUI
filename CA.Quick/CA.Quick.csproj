@@ -77,9 +77,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="QuickTraceListener.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="Utils\Helper.cs" />
+    <Compile Include="Utils\Tree.cs" />
     <Compile Include="Utils\ValidateCode.cs" />
   </ItemGroup>
   <ItemGroup>

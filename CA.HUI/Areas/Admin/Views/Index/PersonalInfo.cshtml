@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "PersonalInfo";
+}
+<form class="form form-horizontal"   method="post" id="form-user-add" novalidate="novalidate">
+		<input type="hidden" name="id" value="@Model.id"/>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>账号：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				@Model.login_name
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>姓名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				@Model.name
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>电话：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				@Model.mobile
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>邮箱：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				@Model.email
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>注册日期：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				@Model.created.ToString("yyyy-MM-dd HH:mm:ss")
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>最后登录日期：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				@Model.last_login_time.ToString("yyyy-MM-dd HH:mm:ss")
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>最后登录IP：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				@Model.last_login_ip
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>最后登录地址：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				@Model.last_login_address
+			</div>
+		</div>
+	</form>
+

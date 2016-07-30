@@ -18,18 +18,16 @@ namespace CA.HUI
             if (!UIHelper.IsLogin())
             {
                var r= new ContentResult();
-                r.Content = filterContext.HttpContext.Session["AdminInfo"].ToString();
-                filterContext.Result = r;
-                //if (filterContext.HttpContext.Request.IsAjaxRequest())
-                //{
-                //    var content = new JsonResult();
-                //    content.Data = Result<String>.Error("请先登录！", -100);
-                //    filterContext.Result = content;
-                //}
-                //else
-                //{
-                //    filterContext.Result = new RedirectResult("Common/Login");
-                //}
+                if (filterContext.HttpContext.Request.IsAjaxRequest())
+                {
+                    var content = new JsonResult();
+                    content.Data = Result<String>.Error("请先登录！", -100);
+                    filterContext.Result = content;
+                }
+                else
+                {
+                    filterContext.Result = new RedirectResult("Common/Login");
+                }
             }
         }
     }

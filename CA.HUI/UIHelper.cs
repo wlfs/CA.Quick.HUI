@@ -11,8 +11,8 @@ namespace CA.HUI
 {
     public  class UIHelper
     {
-        public static bool IsLogin(HttpSessionState session=null) {
-            if (AdminInfo(session) != null)
+        public static bool IsLogin() {
+            if (UserID>0)
             {
                 return true;
             }
@@ -21,17 +21,16 @@ namespace CA.HUI
             }
 
         }
-        public static dynamic AdminInfo(HttpSessionState session=null) {
-            if (session == null) {
-                session = HttpContext.Current.Session;
-            }
+        public static dynamic AdminInfo() {
+            
+            var session = HttpContext.Current.Session;
             return  session["AdminInfo"];
         }
         public static T Get<T>() where T : new() {
             return new T();
         }
         public static string GetSkin() {
-            dynamic dy = AdminInfo(HttpContext.Current.Session);
+            dynamic dy = AdminInfo();
             if (dy==null||string.IsNullOrEmpty(dy.skin)) {
                 return "default";
             }
@@ -39,12 +38,18 @@ namespace CA.HUI
         }
         public static int UserID {
             get {
-                dynamic dy = AdminInfo(HttpContext.Current.Session);
-                if (dy == null || string.IsNullOrEmpty(dy.id))
-                {
-                    return 0;
+
+                var id=HttpContext.Current.Request.Cookies["Admin_Id"];
+                if (id != null && id.Value != null && !string.IsNullOrEmpty(id.Value)) {
+                    return int.Parse(id.Value);
                 }
-                return dy.id;
+                return 0;
+                //dynamic dy = AdminInfo();
+                //if (dy == null || string.IsNullOrEmpty(dy.id))
+                //{
+                //    return 0;
+                //}
+                //return dy.id;
             }
         }
         public static string GetIP4Address()

@@ -11,12 +11,7 @@ namespace CA.HUI.Areas.Admin.Controllers
     [AdminAuthorize]
     public class CRUDController<T> : Controller where T:BaseModel,new()
     {
-        [AdminAuthorize]
-        // GET: Admin/CRUD
-        public ActionResult Index()
-        {
-            return View();
-        }
+        
         // GET: Admin/CommonGroups/Create
         public ActionResult Create()
         {

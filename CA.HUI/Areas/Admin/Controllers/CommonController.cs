@@ -23,9 +23,6 @@ namespace CA.HUI.Areas.Admin.Controllers
 				var pass = collection["pass"];
                 var reuslt=UIHelper.Get<CommonAdmin>().Login(uname, Helper.MD5(pass));
                 if (reuslt.status == 1){
-                    Trace.WriteLine("保存用户session");
-                    Session["AdminInfo"] = reuslt.data;
-                    Session["AdminInfo2"] = 8;
                     _getActions(reuslt.data.id);
 					var return_url = (string)Session["login_return_url"];
                     if (string.IsNullOrEmpty(return_url))
@@ -43,7 +40,9 @@ namespace CA.HUI.Areas.Admin.Controllers
                     );
                     string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                     System.Web.HttpCookie authCookie = new System.Web.HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-                    System.Web.HttpContext.Current.Response.Cookies.Add(authCookie);
+                    Response.Cookies.Add(authCookie);
+                    Response.Cookies.Add(new HttpCookie("Admin_ID", reuslt.data.id));
+                    Response.Cookies.Add(new HttpCookie("Admin_Name", reuslt.data.name));
                 }
                 return Json(reuslt);
             }else{

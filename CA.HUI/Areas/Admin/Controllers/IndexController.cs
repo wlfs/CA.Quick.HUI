@@ -28,5 +28,8 @@ namespace CA.HUI.Areas.Admin.Controllers
             var r=model.Update(coll.GetDynamic(),UIHelper.UserID);
             return Json(r);
         }
+        public ActionResult PersonalInfo() {
+            return View();
+        }
     }
 }
